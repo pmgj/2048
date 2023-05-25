@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 
 public class TwoZeroFourEight {
 
-    private int[][] board = {
+    private final int[][] board = {
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 },
@@ -16,7 +16,7 @@ public class TwoZeroFourEight {
     };
     private final int ROWS = board.length;
     private final int COLS = board[0].length;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public TwoZeroFourEight() {
         this.board[random.nextInt(this.ROWS)][random.nextInt(this.COLS)] = 2;
