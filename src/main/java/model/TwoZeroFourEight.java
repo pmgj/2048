@@ -3,12 +3,11 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.function.BiFunction;
 
 public class TwoZeroFourEight {
 
-    private final int[][] board = {
+    private final Integer[][] board = {
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 },
@@ -17,6 +16,7 @@ public class TwoZeroFourEight {
     private final int ROWS = board.length;
     private final int COLS = board[0].length;
     private final Random random = new Random();
+    private long score = 0;
 
     public TwoZeroFourEight() {
         this.board[random.nextInt(this.ROWS)][random.nextInt(this.COLS)] = 2;
@@ -27,8 +27,12 @@ public class TwoZeroFourEight {
         this.board[cell.getX()][cell.getY()] = 2;
     }
 
-    public int[][] getBoard() {
+    public Integer[][] getBoard() {
         return this.board;
+    }
+
+    public long getScore() {
+        return score;
     }
 
     private boolean onBoard(int row, int col) {
@@ -54,6 +58,7 @@ public class TwoZeroFourEight {
                     this.board[x][y] *= 2;
                     this.board[bRow][bCol] = 0;
                     moved = true;
+                    score += this.board[x][y];
                 } else if (this.board[dRow][dCol] != this.board[bRow][bCol]) {
                     this.board[dRow][dCol] = this.board[bRow][bCol];
                     this.board[bRow][bCol] = 0;
@@ -156,53 +161,7 @@ public class TwoZeroFourEight {
         List<Cell> positions = List.of(new Cell(row - 1, col), new Cell(row + 1, col), new Cell(row, col - 1),
                 new Cell(row, col + 1));
         int value = this.board[row][col];
-        for (Cell cell : positions) {
-            if (this.onBoard(cell.getX(), cell.getY()) && this.board[cell.getX()][cell.getY()] == value) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void print() {
-        for (int[] is : this.board) {
-            for (int i : is) {
-                System.out.print(String.format("%4d  ", i));
-            }
-            System.out.println();
-        }
-        System.out.println("############");
-    }
-
-    public static void main(String[] args) {
-        TwoZeroFourEight game = new TwoZeroFourEight();
-        EndOfGame end = EndOfGame.NONE;
-        Scanner in = new Scanner(System.in);
-        while (end == EndOfGame.NONE) {
-            game.print();
-            System.out.println("Informe sua movimentação: ");
-            String x = in.next();
-            switch (x) {
-                case "w":
-                case "W":
-                    end = game.move(Direction.TOP);
-                    break;
-                case "s":
-                case "S":
-                    end = game.move(Direction.BOTTOM);
-                    break;
-                case "a":
-                case "A":
-                    end = game.move(Direction.LEFT);
-                    break;
-                case "d":
-                case "D":
-                    end = game.move(Direction.RIGHT);
-                    break;
-            }
-        }
-        game.print();
-        System.out.println(end == EndOfGame.WIN ? "You win!" : "You lose!");
-        in.close();
+        return positions.stream().anyMatch(
+                cell -> this.onBoard(cell.getX(), cell.getY()) && this.board[cell.getX()][cell.getY()] == value);
     }
 }
