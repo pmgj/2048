@@ -22,8 +22,7 @@ public class TwoZeroFourEight {
         this.board[random.nextInt(this.ROWS)][random.nextInt(this.COLS)] = 2;
         List<Cell> empty = this.listOfCells(0);
         int size = empty.size();
-        int index = random.nextInt(size);
-        Cell cell = empty.get(index);
+        Cell cell = empty.get(random.nextInt(size));
         this.board[cell.getX()][cell.getY()] = 2;
     }
 
@@ -80,7 +79,7 @@ public class TwoZeroFourEight {
                 break;
             }
             if (this.board[row][col] != 0) {
-                moved |= this.moveDirection(row, col, -rowDir, -colDir);
+                moved = moved || this.moveDirection(row, col, -rowDir, -colDir);
             }
             row += rowDir;
             col += colDir;
@@ -93,22 +92,22 @@ public class TwoZeroFourEight {
         switch (direction) {
             case TOP:
                 for (int j = 0; j < COLS; j++) {
-                    moved |= this.move(0, j, 1, 0);
+                    moved = moved || this.move(0, j, 1, 0);
                 }
                 break;
             case BOTTOM:
                 for (int j = 0; j < COLS; j++) {
-                    moved |= this.move(this.ROWS - 1, j, -1, 0);
+                    moved = moved || this.move(this.ROWS - 1, j, -1, 0);
                 }
                 break;
             case LEFT:
                 for (int j = 0; j < ROWS; j++) {
-                    moved |= this.move(j, 0, 0, 1);
+                    moved = moved || this.move(j, 0, 0, 1);
                 }
                 break;
             case RIGHT:
                 for (int j = 0; j < ROWS; j++) {
-                    moved |= this.move(j, this.COLS - 1, 0, -1);
+                    moved = moved || this.move(j, this.COLS - 1, 0, -1);
                 }
                 break;
         }
