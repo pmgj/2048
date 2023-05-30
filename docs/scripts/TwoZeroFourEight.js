@@ -1,5 +1,6 @@
 import Cell from "./Cell.js";
 import EndOfGame from "./EndOfGame.js";
+import Direction from "./Direction.js";
 
 export default class TwoZeroFourEight {
     constructor() {
@@ -9,14 +10,13 @@ export default class TwoZeroFourEight {
             [0, 0, 0, 0],
             [0, 0, 0, 0],
         ];
-        this.ROWS = board.length;
-        this.COLS = board[0].length;
+        this.ROWS = this.board.length;
+        this.COLS = this.board[0].length;
         this.score = 0;
 
         this.board[this.nextInt(this.ROWS)][this.nextInt(this.COLS)] = 2;
         let empty = this.listOfCells(0);
-        let size = empty.length;
-        let cell = empty.get(this.nextInt(size));
+        let cell = empty[this.nextInt(empty.length)];
         this.board[cell.getX()][cell.getY()] = 2;
     }
 
@@ -55,7 +55,7 @@ export default class TwoZeroFourEight {
                     this.board[x][y] *= 2;
                     this.board[bRow][bCol] = 0;
                     moved = true;
-                    score += this.board[x][y];
+                    this.score += this.board[x][y];
                 } else if (this.board[dRow][dCol] !== this.board[bRow][bCol]) {
                     this.board[dRow][dCol] = this.board[bRow][bCol];
                     this.board[bRow][bCol] = 0;
@@ -85,34 +85,33 @@ export default class TwoZeroFourEight {
         return moved;
     }
 
-    move(direction) {
+    play(direction) {
         let moved = false;
         switch (direction) {
-            case TOP:
-                for (let j = 0; j < COLS; j++) {
+            case Direction.TOP:
+                for (let j = 0; j < this.COLS; j++) {
                     moved |= this.move(0, j, 1, 0);
                 }
                 break;
-            case BOTTOM:
-                for (let j = 0; j < COLS; j++) {
+            case Direction.BOTTOM:
+                for (let j = 0; j < this.COLS; j++) {
                     moved |= this.move(this.ROWS - 1, j, -1, 0);
                 }
                 break;
-            case LEFT:
-                for (let j = 0; j < ROWS; j++) {
+            case Direction.LEFT:
+                for (let j = 0; j < this.ROWS; j++) {
                     moved |= this.move(j, 0, 0, 1);
                 }
                 break;
-            case RIGHT:
-                for (let j = 0; j < ROWS; j++) {
+            case Direction.RIGHT:
+                for (let j = 0; j < this.ROWS; j++) {
                     moved |= this.move(j, this.COLS - 1, 0, -1);
                 }
                 break;
         }
         if (moved) {
             let empty = this.listOfCells(0);
-            let size = empty.length;
-            let cell = empty.get(random.nextInt(size));
+            let cell = empty[this.nextInt(empty.length)];
             this.board[cell.getX()][cell.getY()] = this.nextInt(10) != 9 ? 2 : 4;
         }
         return this.isGameOver();

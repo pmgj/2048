@@ -21,8 +21,7 @@ public class TwoZeroFourEight {
     public TwoZeroFourEight() {
         this.board[random.nextInt(this.ROWS)][random.nextInt(this.COLS)] = 2;
         List<Cell> empty = this.listOfCells(0);
-        int size = empty.size();
-        Cell cell = empty.get(random.nextInt(size));
+        Cell cell = empty.get(random.nextInt(empty.size()));
         this.board[cell.getX()][cell.getY()] = 2;
     }
 
@@ -31,7 +30,7 @@ public class TwoZeroFourEight {
     }
 
     public long getScore() {
-        return score;
+        return this.score;
     }
 
     private boolean onBoard(int row, int col) {
@@ -57,7 +56,7 @@ public class TwoZeroFourEight {
                     this.board[x][y] *= 2;
                     this.board[bRow][bCol] = 0;
                     moved = true;
-                    score += this.board[x][y];
+                    this.score += this.board[x][y];
                 } else if (this.board[dRow][dCol] != this.board[bRow][bCol]) {
                     this.board[dRow][dCol] = this.board[bRow][bCol];
                     this.board[bRow][bCol] = 0;
@@ -79,7 +78,7 @@ public class TwoZeroFourEight {
                 break;
             }
             if (this.board[row][col] != 0) {
-                moved = moved || this.moveDirection(row, col, -rowDir, -colDir);
+                moved |= this.moveDirection(row, col, -rowDir, -colDir);
             }
             row += rowDir;
             col += colDir;
@@ -91,31 +90,29 @@ public class TwoZeroFourEight {
         boolean moved = false;
         switch (direction) {
             case TOP:
-                for (int j = 0; j < COLS; j++) {
-                    moved = moved || this.move(0, j, 1, 0);
+                for (int j = 0; j < this.COLS; j++) {
+                    moved |= this.move(0, j, 1, 0);
                 }
                 break;
             case BOTTOM:
-                for (int j = 0; j < COLS; j++) {
-                    moved = moved || this.move(this.ROWS - 1, j, -1, 0);
+                for (int j = 0; j < this.COLS; j++) {
+                    moved |= this.move(this.ROWS - 1, j, -1, 0);
                 }
                 break;
             case LEFT:
-                for (int j = 0; j < ROWS; j++) {
-                    moved = moved || this.move(j, 0, 0, 1);
+                for (int j = 0; j < this.ROWS; j++) {
+                    moved |= this.move(j, 0, 0, 1);
                 }
                 break;
             case RIGHT:
-                for (int j = 0; j < ROWS; j++) {
-                    moved = moved || this.move(j, this.COLS - 1, 0, -1);
+                for (int j = 0; j < this.ROWS; j++) {
+                    moved |= this.move(j, this.COLS - 1, 0, -1);
                 }
                 break;
         }
         if (moved) {
             List<Cell> empty = this.listOfCells(0);
-            int size = empty.size();
-            int index = random.nextInt(size);
-            Cell cell = empty.get(index);
+            Cell cell = empty.get(random.nextInt(empty.size()));
             this.board[cell.getX()][cell.getY()] = random.nextInt(10) != 9 ? 2 : 4;
         }
         return this.isGameOver();
