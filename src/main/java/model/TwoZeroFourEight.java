@@ -19,10 +19,10 @@ public class TwoZeroFourEight {
     private long score = 0;
 
     public TwoZeroFourEight() {
-        this.board[random.nextInt(this.ROWS)][random.nextInt(this.COLS)] = 2;
+        this.board[random.nextInt(this.ROWS)][random.nextInt(this.COLS)] = this.getRandomValue();
         List<Cell> empty = this.listOfCells(0);
         Cell cell = empty.get(random.nextInt(empty.size()));
-        this.board[cell.getX()][cell.getY()] = 2;
+        this.board[cell.getX()][cell.getY()] = this.getRandomValue();
     }
 
     public Integer[][] getBoard() {
@@ -31,6 +31,10 @@ public class TwoZeroFourEight {
 
     public long getScore() {
         return this.score;
+    }
+
+    private int getRandomValue() {
+        return random.nextInt(10) != 9 ? 2 : 4;
     }
 
     private boolean onBoard(int row, int col) {
@@ -86,7 +90,7 @@ public class TwoZeroFourEight {
         return moved;
     }
 
-    public EndOfGame move(Direction direction) {
+    public EndOfGame play(Direction direction) {
         boolean moved = false;
         switch (direction) {
             case TOP:
@@ -113,7 +117,7 @@ public class TwoZeroFourEight {
         if (moved) {
             List<Cell> empty = this.listOfCells(0);
             Cell cell = empty.get(random.nextInt(empty.size()));
-            this.board[cell.getX()][cell.getY()] = random.nextInt(10) != 9 ? 2 : 4;
+            this.board[cell.getX()][cell.getY()] = this.getRandomValue();
         }
         return this.isGameOver();
     }
@@ -136,7 +140,7 @@ public class TwoZeroFourEight {
             return EndOfGame.WIN;
         }
         list = this.listOfCells(0);
-        if (list.size() == 0 && this.lostGame()) {
+        if (list.isEmpty() && this.lostGame()) {
             return EndOfGame.LOSE;
         }
         return EndOfGame.NONE;

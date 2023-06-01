@@ -28,6 +28,16 @@ td {
     background-color: rgba(187, 173, 160, 0.8);
 }
 
+.show {
+    animation: appear 200ms ease 100ms;
+    animation-fill-mode: backwards;
+}
+
+td div {
+    transition: 100ms ease-in-out;
+    transition-property: transform;
+}
+
 .tile-2 {
     background-color: #eee4da;
 }

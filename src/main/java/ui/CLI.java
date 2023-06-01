@@ -28,19 +28,19 @@ public class CLI {
             switch (x) {
                 case "w":
                 case "W":
-                    end = game.move(Direction.TOP);
+                    end = game.play(Direction.TOP);
                     break;
                 case "s":
                 case "S":
-                    end = game.move(Direction.BOTTOM);
+                    end = game.play(Direction.BOTTOM);
                     break;
                 case "a":
                 case "A":
-                    end = game.move(Direction.LEFT);
+                    end = game.play(Direction.LEFT);
                     break;
                 case "d":
                 case "D":
-                    end = game.move(Direction.RIGHT);
+                    end = game.play(Direction.RIGHT);
                     break;
             }
         }

@@ -13,11 +13,13 @@ export default class TwoZeroFourEight {
         this.ROWS = this.board.length;
         this.COLS = this.board[0].length;
         this.score = 0;
+        this.newNumber = [];
+        this.movedNumbers = [];
 
-        this.board[this.nextInt(this.ROWS)][this.nextInt(this.COLS)] = 2;
+        this.getRandomValue(this.nextInt(this.ROWS), this.nextInt(this.COLS));
         let empty = this.listOfCells(0);
         let cell = empty[this.nextInt(empty.length)];
-        this.board[cell.getX()][cell.getY()] = 2;
+        this.getRandomValue(cell.getX(),cell.getY());
     }
 
     getBoard() {
@@ -25,11 +27,24 @@ export default class TwoZeroFourEight {
     }
 
     getScore() {
-        return score;
+        return this.score;
+    }
+
+    getNewNumber() {
+        return this.newNumber;
+    }
+
+    getMovedNumbers() {
+        return this.movedNumbers;
     }
 
     nextInt(max) {
         return Math.floor(Math.random() * max);
+    }
+
+    getRandomValue(x, y) {
+        this.board[x][y] = this.nextInt(10) != 9 ? 2 : 4;
+        this.newNumber.push({cell: new Cell(x, y), value: this.board[x][y]});
     }
 
     onBoard({ x, y }) {
@@ -47,6 +62,7 @@ export default class TwoZeroFourEight {
                     this.board[dRow][dCol] = this.board[bRow][bCol];
                     this.board[bRow][bCol] = 0;
                     moved = true;
+                    this.movedNumbers.push([new Cell(bRow, bCol), new Cell(dRow, dCol)]);
                 }
                 break;
             }
@@ -55,11 +71,13 @@ export default class TwoZeroFourEight {
                     this.board[x][y] *= 2;
                     this.board[bRow][bCol] = 0;
                     moved = true;
+                    this.movedNumbers.push([new Cell(bRow, bCol), new Cell(x, y)]);
                     this.score += this.board[x][y];
                 } else if (this.board[dRow][dCol] !== this.board[bRow][bCol]) {
                     this.board[dRow][dCol] = this.board[bRow][bCol];
                     this.board[bRow][bCol] = 0;
                     moved = true;
+                    this.movedNumbers.push([new Cell(bRow, bCol), new Cell(dRow, dCol)]);
                 }
                 break;
             }
@@ -86,6 +104,8 @@ export default class TwoZeroFourEight {
     }
 
     play(direction) {
+        this.newNumber = [];
+        this.movedNumbers = [];
         let moved = false;
         switch (direction) {
             case Direction.TOP:
@@ -112,7 +132,7 @@ export default class TwoZeroFourEight {
         if (moved) {
             let empty = this.listOfCells(0);
             let cell = empty[this.nextInt(empty.length)];
-            this.board[cell.getX()][cell.getY()] = this.nextInt(10) != 9 ? 2 : 4;
+            this.getRandomValue(cell.getX(),cell.getY());
         }
         return this.isGameOver();
     }
