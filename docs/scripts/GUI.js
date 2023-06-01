@@ -12,6 +12,7 @@ class GUI {
             return;
         }
         let end = this.game.play(bindings[evt.key]);
+        console.table(this.game.getBoard());
         this.moveTiles(this.game.getMovedNumbers());
         this.showNewNumbers(this.game.getNewNumber());
         this.isGameOver(end);
@@ -19,14 +20,16 @@ class GUI {
     moveTiles(tiles) {
         let tbody = document.querySelector("tbody");
         for (const [beginCell, endCell] of tiles) {
-            // console.log(beginCell);
-            // console.log(endCell);
             let { x: xi, y: yi } = beginCell;
             let { x: xf, y: yf } = endCell;
             let beginTD = tbody.rows[xi].cells[yi];
             let beginTile = beginTD.firstChild;
-            let xDiff = (xf - xi) * 120;
-            let yDiff = (yf - yi) * 120;
+            if (!beginTile) {
+                console.log(beginCell);
+            }
+            let xDiff = (xf - xi) * beginTD.offsetWidth;
+            let yDiff = (yf - yi) * beginTD.offsetWidth;
+            beginTile.style.transitionDelay = "100ms";
             beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
             beginTile.ontransitionend = () => {
                 let endTD = tbody.rows[xf].cells[yf];
@@ -40,7 +43,6 @@ class GUI {
                 } else {
                     endTD.appendChild(beginTile);
                     beginTile.style.cssText = "";
-                    beginTile.classList.remove("show");
                 }
             };
         }
@@ -68,6 +70,7 @@ class GUI {
                     div.classList.add(`tile-${value}`);
                     div.textContent = value;
                     div.classList.add("show");
+                    div.onanimationend = () => div.classList.remove("show");
                     td.appendChild(div);
                 }
                 tr.appendChild(td);
@@ -84,13 +87,13 @@ class GUI {
             div.textContent = value;
             div.classList.add("show");
             div.classList.add(`tile-${value}`);
+            div.onanimationend = () => div.classList.remove("show");
             td.appendChild(div);
         }
     }
     init() {
         this.game = new TwoZeroFourEight();
         this.printBoard(this.game.getBoard());
-        // this.showNewNumbers(this.game.getNewNumber());
         document.addEventListener("keyup", this.move.bind(this));
     }
 }
