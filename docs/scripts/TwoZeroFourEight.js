@@ -7,8 +7,8 @@ export default class TwoZeroFourEight {
         this.board = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
-            [0, 0, 2, 4],
-            [0, 2, 4, 4],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
         ];
         this.ROWS = this.board.length;
         this.COLS = this.board[0].length;
@@ -16,10 +16,10 @@ export default class TwoZeroFourEight {
         this.newNumber = [];
         this.movedNumbers = [];
 
-        // this.getRandomValue(this.nextInt(this.ROWS), this.nextInt(this.COLS));
-        // let empty = this.listOfCells(0);
-        // let cell = empty[this.nextInt(empty.length)];
-        // this.getRandomValue(cell.getX(),cell.getY());
+        this.getRandomValue(this.nextInt(this.ROWS), this.nextInt(this.COLS));
+        let empty = this.listOfCells(0);
+        let cell = empty[this.nextInt(empty.length)];
+        this.getRandomValue(cell.getX(),cell.getY());
     }
 
     getBoard() {

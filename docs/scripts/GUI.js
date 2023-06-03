@@ -12,9 +12,7 @@ class GUI {
             return;
         }
         let end = this.game.play(bindings[evt.key]);
-        // console.table(this.game.getBoard());
         this.moveTiles(this.game.getMovedNumbers());
-        this.showNewNumbers(this.game.getNewNumber());
         this.isGameOver(end);
     }
     moveTiles(tiles) {
@@ -59,13 +57,14 @@ class GUI {
                 const value = board[x][y];
                 let td = tbody.rows[x].cells[y];
                 let div = td.firstChild;
-                let num = parseInt(div.textContent);
-                div.textContent = value;
+                let num = div.textContent;
                 div.classList.remove(`tile-${num}`);
                 div.classList.add(`tile-${value}`);
                 div.classList.add(`pop`);
+                div.textContent = value;
                 div.onanimationend = () => div.classList.remove("pop");
             }
+            this.showNewNumbers(this.game.getNewNumber());
         });
     }
     isGameOver(end) {
