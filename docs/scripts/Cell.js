@@ -24,4 +24,8 @@ export default class Cell {
     setY(col) {
         this.y = col;
     }
+
+    toString() {
+        return `(${this.x}, ${this.y})`;
+    }
 }

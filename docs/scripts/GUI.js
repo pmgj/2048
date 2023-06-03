@@ -12,40 +12,61 @@ class GUI {
             return;
         }
         let end = this.game.play(bindings[evt.key]);
-        console.table(this.game.getBoard());
+        // console.table(this.game.getBoard());
         this.moveTiles(this.game.getMovedNumbers());
         this.showNewNumbers(this.game.getNewNumber());
         this.isGameOver(end);
     }
     moveTiles(tiles) {
         let tbody = document.querySelector("tbody");
+        let promises = [];
         for (const [beginCell, endCell] of tiles) {
-            let { x: xi, y: yi } = beginCell;
-            let { x: xf, y: yf } = endCell;
-            let beginTD = tbody.rows[xi].cells[yi];
-            let beginTile = beginTD.firstChild;
-            if (!beginTile) {
-                console.log(beginCell);
-            }
-            let xDiff = (xf - xi) * beginTD.offsetWidth;
-            let yDiff = (yf - yi) * beginTD.offsetWidth;
-            beginTile.style.transitionDelay = "100ms";
-            beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
-            beginTile.ontransitionend = () => {
+            let p = new Promise(resolve => {
+                let { x: xi, y: yi } = beginCell;
+                let { x: xf, y: yf } = endCell;
+                let beginTD = tbody.rows[xi].cells[yi];
+                let beginTile = beginTD.firstChild;
+                let xDiff = (xf - xi) * beginTD.offsetWidth;
+                let yDiff = (yf - yi) * beginTD.offsetWidth;
+                beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
+                beginTile.ontransitionend = () => {
+                    resolve(true);
+                };
+            });
+            promises.push(p);
+        }
+        Promise.all(promises).then(values => {
+            let cells = [];
+            for (const [beginCell, endCell] of tiles) {
+                let { x: xi, y: yi } = beginCell;
+                let { x: xf, y: yf } = endCell;
+                let beginTD = tbody.rows[xi].cells[yi];
+                let beginTile = beginTD.firstChild;
                 let endTD = tbody.rows[xf].cells[yf];
                 let endTile = endTD.firstChild;
                 if (endTile) {
-                    let value = parseInt(endTile.textContent);
-                    endTile.textContent = value * 2;
                     beginTD.innerHTML = "";
-                    endTile.classList.remove(`tile-${value}`);
-                    endTile.classList.add(`tile-${value * 2}`);
+                    if (!cells.some(e => e.equals(endCell))) {
+                        cells.push(endCell);
+                    }
                 } else {
                     endTD.appendChild(beginTile);
-                    beginTile.style.cssText = "";
+                    beginTile.removeAttribute("style");
                 }
-            };
-        }
+            }
+            let board = this.game.getBoard();
+            for (let { x, y } of cells) {
+                const value = board[x][y];
+                let td = tbody.rows[x].cells[y];
+                let div = td.firstChild;
+                let num = parseInt(div.textContent);
+                div.textContent = value;
+                div.classList.remove(`tile-${num}`);
+                div.classList.add(`tile-${value}`);
+                div.classList.add(`pop`);
+                div.onanimationend = () => div.classList.remove("pop");
+            }
+        });
     }
     isGameOver(end) {
         switch (end) {

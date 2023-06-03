@@ -33,6 +33,11 @@ td {
     animation-fill-mode: backwards;
 }
 
+.pop {
+    animation: pop 200ms ease 100ms;
+    animation-fill-mode: backwards;
+}
+
 td div {
     transition: transform 100ms ease-in-out;
 }
