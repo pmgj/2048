@@ -130,3 +130,20 @@ td div {
 #message {
     text-align: center;
 }
+
+#score {
+    background-color: #bbada0;
+    color: white;
+    width: 75px;
+    text-align: center;
+    height: 50px;
+    padding-top: 5px;
+    border-radius: 10px;
+    margin: 0 auto;
+}
+
+#score::before {
+    position: relative;
+    content: "SCORE \00000A";
+    top: -5px;
+}

@@ -12,8 +12,14 @@ class GUI {
             return;
         }
         let end = this.game.play(bindings[evt.key]);
-        this.moveTiles(this.game.getMovedNumbers());
+        this.printBoard(this.game.getBoard());
+        // this.moveTiles(this.game.getMovedNumbers());
+        this.updateScore(this.game.getScore())
         this.isGameOver(end);
+    }
+    updateScore(score) {
+        let elem = document.querySelector("#score");
+        elem.textContent = score;
     }
     moveTiles(tiles) {
         let tbody = document.querySelector("tbody");
@@ -110,8 +116,8 @@ class GUI {
                     let div = document.createElement("div");
                     div.classList.add(`tile-${value}`);
                     div.textContent = value;
-                    div.classList.add("show");
-                    div.onanimationend = () => div.classList.remove("show");
+                    // div.classList.add("show");
+                    // div.onanimationend = () => div.classList.remove("show");
                     td.appendChild(div);
                 }
                 tr.appendChild(td);
