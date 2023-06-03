@@ -126,3 +126,7 @@ td div {
         transform: scale(1);
     }
 }
+
+#message {
+    text-align: center;
+}

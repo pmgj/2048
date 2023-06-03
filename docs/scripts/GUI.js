@@ -27,9 +27,7 @@ class GUI {
                 let xDiff = (xf - xi) * beginTD.offsetWidth;
                 let yDiff = (yf - yi) * beginTD.offsetWidth;
                 beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
-                beginTile.ontransitionend = () => {
-                    resolve(true);
-                };
+                beginTile.ontransitionend = () => resolve(true);
             });
             promises.push(p);
         }
@@ -65,15 +63,38 @@ class GUI {
                 div.onanimationend = () => div.classList.remove("pop");
             }
             this.showNewNumbers(this.game.getNewNumber());
+            // this.compareBoardNumbers();
         });
     }
+    // compareBoardNumbers() {
+    //     let board = this.game.getBoard();
+    //     let tbody = document.querySelector("tbody");
+    //     for (let i = 0; i < board.length; i++) {
+    //         for (let j = 0; j < board[i].length; j++) {
+    //             const element = board[i][j];
+    //             let td = tbody.rows[i].cells[j];
+    //             let div = td.firstChild;
+    //             if (div) {
+    //                 let value = parseInt(div.textContent);
+    //                 if (value !== element) {
+    //                     console.log(board);
+    //                     return;
+    //                 }
+    //             } else if (element !== 0) {
+    //                 console.log(board);
+    //                 return;
+    //             }
+    //         }
+    //     }
+    // }
     isGameOver(end) {
+        let message = document.querySelector("#message");
         switch (end) {
             case EndOfGame.WIN:
-                console.log("You win!");
+                message.textContent = "You win!";
                 break;
             case EndOfGame.LOSE:
-                console.log("You lose!");
+                message.textContent = "You lose!";
                 break;
         }
     }

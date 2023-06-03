@@ -44,7 +44,7 @@ export default class TwoZeroFourEight {
 
     getRandomValue(x, y) {
         this.board[x][y] = this.nextInt(10) != 9 ? 2 : 4;
-        this.newNumber.push({cell: new Cell(x, y), value: this.board[x][y]});
+        this.newNumber.push({ cell: new Cell(x, y), value: this.board[x][y] });
     }
 
     onBoard({ x, y }) {
@@ -132,7 +132,7 @@ export default class TwoZeroFourEight {
         if (moved) {
             let empty = this.listOfCells(0);
             let cell = empty[this.nextInt(empty.length)];
-            this.getRandomValue(cell.getX(),cell.getY());
+            this.getRandomValue(cell.getX(), cell.getY());
         }
         return this.isGameOver();
     }
