@@ -29,9 +29,9 @@ class GUI {
                 let { x: xi, y: yi } = beginCell;
                 let { x: xf, y: yf } = endCell;
                 let beginTD = tbody.rows[xi].cells[yi];
-                let beginTile = beginTD.firstChild;
                 let xDiff = (xf - xi) * beginTD.offsetWidth;
                 let yDiff = (yf - yi) * beginTD.offsetWidth;
+                let beginTile = beginTD.firstChild;
                 beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
                 beginTile.ontransitionend = () => resolve(true);
             });
@@ -72,27 +72,30 @@ class GUI {
             // this.compareBoardNumbers();
         });
     }
-    // compareBoardNumbers() {
-    //     let board = this.game.getBoard();
-    //     let tbody = document.querySelector("tbody");
-    //     for (let i = 0; i < board.length; i++) {
-    //         for (let j = 0; j < board[i].length; j++) {
-    //             const element = board[i][j];
-    //             let td = tbody.rows[i].cells[j];
-    //             let div = td.firstChild;
-    //             if (div) {
-    //                 let value = parseInt(div.textContent);
-    //                 if (value !== element) {
-    //                     console.log(board);
-    //                     return;
-    //                 }
-    //             } else if (element !== 0) {
-    //                 console.log(board);
-    //                 return;
-    //             }
-    //         }
-    //     }
-    // }
+    compareBoardNumbers() {
+        let board = this.game.getBoard();
+        let tbody = document.querySelector("tbody");
+        let temp = [];
+        for (let i = 0; i < board.length; i++) {
+            let row = [];
+            for (let j = 0; j < board[i].length; j++) {
+                let td = tbody.rows[i].cells[j];
+                let div = td.firstChild;
+                if (div) {
+                    let value = parseInt(div.textContent);
+                    row.push(value);
+                } else {
+                    row.push(0)
+                }
+            }
+            temp.push(row);
+        }
+        if (JSON.stringify(this.game.getBoard()) !== JSON.stringify(temp)) {
+            console.clear();
+            console.table(this.game.getBoard());
+            console.table(temp);
+        }
+    }
     isGameOver(end) {
         let message = document.querySelector("#message");
         switch (end) {
