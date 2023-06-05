@@ -5,26 +5,24 @@ import TwoZeroFourEight from "./TwoZeroFourEight.js";
 class GUI {
     constructor() {
         this.game = null;
-        this.canMove = true;
     }
     move(evt) {
         let bindings = { "ArrowUp": Direction.TOP, "ArrowDown": Direction.BOTTOM, "ArrowLeft": Direction.LEFT, "ArrowRight": Direction.RIGHT };
         if (!bindings[evt.key]) {
             return;
         }
-        if(!this.canMove) return;
-        this.canMove = false;
         let end = this.game.play(bindings[evt.key]);
         // this.printBoard(this.game.getBoard());
-        this.moveTiles(this.game.getMovedNumbers());
+        let mn = this.game.getMovedNumbers();
         this.updateScore(this.game.getScore())
         this.isGameOver(end);
+        this.moveTiles(mn);
     }
     updateScore(score) {
         let elem = document.querySelector("#score");
         elem.textContent = score;
     }
-    moveTiles(tiles) {
+    async moveTiles(tiles) {
         let tbody = document.querySelector("tbody");
         let promises = [];
         for (const [beginCell, endCell] of tiles) {
@@ -36,69 +34,42 @@ class GUI {
                 let yDiff = (yf - yi) * beginTD.offsetWidth;
                 let beginTile = beginTD.firstChild;
                 beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
-                beginTile.ontransitionend = () => resolve(true);
+                beginTile.ontransitionend = () => resolve([beginCell, endCell]);
             });
             promises.push(p);
         }
-        Promise.all(promises).then(values => {
-            let cells = [];
-            for (const [beginCell, endCell] of tiles) {
-                let { x: xi, y: yi } = beginCell;
-                let { x: xf, y: yf } = endCell;
-                let beginTD = tbody.rows[xi].cells[yi];
-                let beginTile = beginTD.firstChild;
-                let endTD = tbody.rows[xf].cells[yf];
-                let endTile = endTD.firstChild;
-                if (endTile) {
-                    beginTD.innerHTML = "";
-                    if (!cells.some(e => e.equals(endCell))) {
-                        cells.push(endCell);
-                    }
-                } else {
-                    endTD.appendChild(beginTile);
-                    beginTile.removeAttribute("style");
+        let x = await Promise.all(promises);
+        let cells = [];
+        for (const [beginCell, endCell] of x) {
+            let { x: xi, y: yi } = beginCell;
+            let { x: xf, y: yf } = endCell;
+            let beginTD = tbody.rows[xi].cells[yi];
+            let beginTile = beginTD.firstChild;
+            let endTD = tbody.rows[xf].cells[yf];
+            let endTile = endTD.firstChild;
+            if (endTile) {
+                beginTD.innerHTML = "";
+                if (!cells.some(e => e.equals(endCell))) {
+                    cells.push(endCell);
                 }
+            } else {
+                endTD.appendChild(beginTile);
+                beginTile.removeAttribute("style");
             }
-            let board = this.game.getBoard();
-            for (let { x, y } of cells) {
-                const value = board[x][y];
-                let td = tbody.rows[x].cells[y];
-                let div = td.firstChild;
-                let num = div.textContent;
-                div.classList.remove(`tile-${num}`);
-                div.classList.add(`tile-${value}`);
-                div.classList.add(`pop`);
-                div.textContent = value;
-                div.onanimationend = () => div.classList.remove("pop");
-            }
-            this.showNewNumbers(this.game.getNewNumber());
-            // this.compareBoardNumbers();
-            this.canMove = true;
-        });
-    }
-    compareBoardNumbers() {
+        }
         let board = this.game.getBoard();
-        let tbody = document.querySelector("tbody");
-        let temp = [];
-        for (let i = 0; i < board.length; i++) {
-            let row = [];
-            for (let j = 0; j < board[i].length; j++) {
-                let td = tbody.rows[i].cells[j];
-                let div = td.firstChild;
-                if (div) {
-                    let value = parseInt(div.textContent);
-                    row.push(value);
-                } else {
-                    row.push(0)
-                }
-            }
-            temp.push(row);
+        for (let { x, y } of cells) {
+            const value = board[x][y];
+            let td = tbody.rows[x].cells[y];
+            let div = td.firstChild;
+            let num = div.textContent;
+            div.classList.remove(`tile-${num}`);
+            div.classList.add(`tile-${value}`);
+            div.classList.add(`pop`);
+            div.textContent = value;
+            div.onanimationend = () => div.classList.remove("pop");
         }
-        if (JSON.stringify(this.game.getBoard()) !== JSON.stringify(temp)) {
-            console.clear();
-            console.table(this.game.getBoard());
-            console.table(temp);
-        }
+        this.showNewNumbers(this.game.getNewNumber());
     }
     isGameOver(end) {
         let message = document.querySelector("#message");
@@ -123,8 +94,6 @@ class GUI {
                     let div = document.createElement("div");
                     div.classList.add(`tile-${value}`);
                     div.textContent = value;
-                    // div.classList.add("show");
-                    // div.onanimationend = () => div.classList.remove("show");
                     td.appendChild(div);
                 }
                 tr.appendChild(td);
