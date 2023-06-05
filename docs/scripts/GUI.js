@@ -5,15 +5,18 @@ import TwoZeroFourEight from "./TwoZeroFourEight.js";
 class GUI {
     constructor() {
         this.game = null;
+        this.canMove = true;
     }
     move(evt) {
         let bindings = { "ArrowUp": Direction.TOP, "ArrowDown": Direction.BOTTOM, "ArrowLeft": Direction.LEFT, "ArrowRight": Direction.RIGHT };
         if (!bindings[evt.key]) {
             return;
         }
+        if(!this.canMove) return;
+        this.canMove = false;
         let end = this.game.play(bindings[evt.key]);
-        this.printBoard(this.game.getBoard());
-        // this.moveTiles(this.game.getMovedNumbers());
+        // this.printBoard(this.game.getBoard());
+        this.moveTiles(this.game.getMovedNumbers());
         this.updateScore(this.game.getScore())
         this.isGameOver(end);
     }
@@ -70,6 +73,7 @@ class GUI {
             }
             this.showNewNumbers(this.game.getNewNumber());
             // this.compareBoardNumbers();
+            this.canMove = true;
         });
     }
     compareBoardNumbers() {
