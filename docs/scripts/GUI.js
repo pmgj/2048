@@ -5,47 +5,33 @@ import TwoZeroFourEight from "./TwoZeroFourEight.js";
 class GUI {
     constructor() {
         this.game = null;
+        this.tbody = document.querySelector("tbody");
     }
-    move(evt) {
+    async move(evt) {
         let bindings = { "ArrowUp": Direction.TOP, "ArrowDown": Direction.BOTTOM, "ArrowLeft": Direction.LEFT, "ArrowRight": Direction.RIGHT };
         if (!bindings[evt.key]) {
             return;
         }
         let end = this.game.play(bindings[evt.key]);
-        // this.printBoard(this.game.getBoard());
+        // this.printBoard(this.game.getBoard());    
         let mn = this.game.getMovedNumbers();
+        await this.moveTiles(mn);
+        this.updatePositions(mn);
         this.updateScore(this.game.getScore())
         this.isGameOver(end);
-        this.moveTiles(mn);
     }
     updateScore(score) {
         let elem = document.querySelector("#score");
         elem.textContent = score;
     }
-    async moveTiles(tiles) {
-        let tbody = document.querySelector("tbody");
-        let promises = [];
-        for (const [beginCell, endCell] of tiles) {
-            let p = new Promise(resolve => {
-                let { x: xi, y: yi } = beginCell;
-                let { x: xf, y: yf } = endCell;
-                let beginTD = tbody.rows[xi].cells[yi];
-                let xDiff = (xf - xi) * beginTD.offsetWidth;
-                let yDiff = (yf - yi) * beginTD.offsetWidth;
-                let beginTile = beginTD.firstChild;
-                beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
-                beginTile.ontransitionend = () => resolve([beginCell, endCell]);
-            });
-            promises.push(p);
-        }
-        let x = await Promise.all(promises);
+    updatePositions(tiles) {
         let cells = [];
-        for (const [beginCell, endCell] of x) {
+        for (const [beginCell, endCell] of tiles) {
             let { x: xi, y: yi } = beginCell;
             let { x: xf, y: yf } = endCell;
-            let beginTD = tbody.rows[xi].cells[yi];
+            let beginTD = this.tbody.rows[xi].cells[yi];
             let beginTile = beginTD.firstChild;
-            let endTD = tbody.rows[xf].cells[yf];
+            let endTD = this.tbody.rows[xf].cells[yf];
             let endTile = endTD.firstChild;
             if (endTile) {
                 beginTD.innerHTML = "";
@@ -60,7 +46,7 @@ class GUI {
         let board = this.game.getBoard();
         for (let { x, y } of cells) {
             const value = board[x][y];
-            let td = tbody.rows[x].cells[y];
+            let td = this.tbody.rows[x].cells[y];
             let div = td.firstChild;
             let num = div.textContent;
             div.classList.remove(`tile-${num}`);
@@ -70,6 +56,24 @@ class GUI {
             div.onanimationend = () => div.classList.remove("pop");
         }
         this.showNewNumbers(this.game.getNewNumber());
+    }
+    moveTiles(tiles) {
+        let promises = [];
+        for (const [beginCell, endCell] of tiles) {
+            let p = new Promise(resolve => {
+                let { x: xi, y: yi } = beginCell;
+                let { x: xf, y: yf } = endCell;
+                let beginTD = this.tbody.rows[xi].cells[yi];
+                let xDiff = (xf - xi) * beginTD.offsetWidth;
+                let yDiff = (yf - yi) * beginTD.offsetWidth;
+                console.table(beginCell);
+                let beginTile = beginTD.firstChild;
+                beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
+                beginTile.ontransitionend = () => resolve([beginCell, endCell]);
+            });
+            promises.push(p);
+        }
+        return Promise.all(promises);
     }
     isGameOver(end) {
         let message = document.querySelector("#message");
@@ -83,8 +87,7 @@ class GUI {
         }
     }
     printBoard(board) {
-        let tbody = document.querySelector("tbody");
-        tbody.innerHTML = "";
+        this.tbody.innerHTML = "";
         for (let i = 0; i < board.length; i++) {
             let tr = document.createElement("tr");
             for (let j = 0; j < board[i].length; j++) {
@@ -98,14 +101,13 @@ class GUI {
                 }
                 tr.appendChild(td);
             }
-            tbody.appendChild(tr);
+            this.tbody.appendChild(tr);
         }
     }
     showNewNumbers(cells) {
-        let tbody = document.querySelector("tbody");
         for (const { cell, value } of cells) {
             let { x, y } = cell;
-            let td = tbody.rows[x].cells[y];
+            let td = this.tbody.rows[x].cells[y];
             let div = document.createElement("div");
             div.textContent = value;
             div.classList.add("show");
