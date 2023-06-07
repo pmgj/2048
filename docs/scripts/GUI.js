@@ -28,6 +28,17 @@ class GUI {
     updateScore(score) {
         let elem = document.querySelector(".score div");
         elem.textContent = score;
+        let best = localStorage.getItem("best");
+        if(best) {
+            let b = parseInt(best);
+            if(score > b) {
+                localStorage.setItem("best", score);
+            }
+        } else {
+            localStorage.setItem("best", "0");
+        }
+        elem = document.querySelector(".score:last-child div");
+        elem.textContent = localStorage.getItem("best");
     }
     updatePositions(tiles) {
         let cells = [];
@@ -124,6 +135,7 @@ class GUI {
     init() {
         this.game = new TwoZeroFourEight();
         this.printBoard(this.game.getBoard());
+        this.updateScore(0);
         document.addEventListener("keyup", this.move.bind(this));
     }
 }
