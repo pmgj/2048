@@ -4,8 +4,13 @@ body {
     font-size: 18px;
 }
 
-table {
+main {
+    width: 500px;
     margin: 0 auto;
+    position: relative;
+}
+
+table {
     width: 500px;
     height: 500px;
     border: 15px solid rgb(187, 173, 160);
@@ -13,8 +18,9 @@ table {
 }
 
 caption {
-    font-size: 64px;
+    font-size: 72px;
     font-weight: bold;
+    text-align: left;
 }
 
 td {
@@ -131,19 +137,34 @@ td div {
     text-align: center;
 }
 
-#score {
+.scores-container {
+    display: flex;
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.scores-container .score:last-child {
+    margin-left: 5px;
+}
+
+.score {
+    color: #eee1c9;
     background-color: #bbada0;
-    color: white;
     width: 75px;
     text-align: center;
     height: 50px;
-    padding-top: 5px;
     border-radius: 10px;
     margin: 0 auto;
+    text-transform: uppercase;
+    font-size: small;
+    font-weight: bold;
+    padding: 10px;
 }
-
-#score::before {
-    position: relative;
-    content: "SCORE \00000A";
-    top: -5px;
+.score div {
+    margin-top: 5px;
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
 }

@@ -26,7 +26,7 @@ class GUI {
         // console.log("End move...");
     }
     updateScore(score) {
-        let elem = document.querySelector("#score");
+        let elem = document.querySelector(".score div");
         elem.textContent = score;
     }
     updatePositions(tiles) {
