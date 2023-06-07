@@ -6,19 +6,24 @@ class GUI {
     constructor() {
         this.game = null;
         this.tbody = document.querySelector("tbody");
+        this.canMove = true;
     }
     async move(evt) {
         let bindings = { "ArrowUp": Direction.TOP, "ArrowDown": Direction.BOTTOM, "ArrowLeft": Direction.LEFT, "ArrowRight": Direction.RIGHT };
         if (!bindings[evt.key]) {
             return;
         }
+        console.log("Start move...", this.canMove);
+        if(!this.canMove) return;
+        this.canMove = false;
         let end = this.game.play(bindings[evt.key]);
-        // this.printBoard(this.game.getBoard());    
         let mn = this.game.getMovedNumbers();
         await this.moveTiles(mn);
         this.updatePositions(mn);
         this.updateScore(this.game.getScore())
         this.isGameOver(end);
+        this.canMove = true;
+        console.log("End move...");
     }
     updateScore(score) {
         let elem = document.querySelector("#score");
@@ -53,7 +58,7 @@ class GUI {
             div.classList.add(`tile-${value}`);
             div.classList.add(`pop`);
             div.textContent = value;
-            div.onanimationend = () => div.classList.remove("pop");
+            div.addEventListener("animationend", () => div.classList.remove("pop"));
         }
         this.showNewNumbers(this.game.getNewNumber());
     }
@@ -66,13 +71,16 @@ class GUI {
                 let beginTD = this.tbody.rows[xi].cells[yi];
                 let xDiff = (xf - xi) * beginTD.offsetWidth;
                 let yDiff = (yf - yi) * beginTD.offsetWidth;
-                console.table(beginCell);
                 let beginTile = beginTD.firstChild;
+                beginTile.classList.remove("show");
+                beginTile.classList.remove("pop");
                 beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
                 beginTile.ontransitionend = () => resolve([beginCell, endCell]);
             });
+            console.log(beginCell, endCell);
             promises.push(p);
         }
+        console.log("Promise.all", promises);
         return Promise.all(promises);
     }
     isGameOver(end) {
@@ -112,7 +120,7 @@ class GUI {
             div.textContent = value;
             div.classList.add("show");
             div.classList.add(`tile-${value}`);
-            div.onanimationend = () => div.classList.remove("show");
+            div.addEventListener("animationend", () => div.classList.remove("show"));
             td.appendChild(div);
         }
     }
