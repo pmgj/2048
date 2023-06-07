@@ -13,7 +13,7 @@ class GUI {
         if (!bindings[evt.key]) {
             return;
         }
-        console.log("Start move...", this.canMove);
+        // console.log("Start move...", this.canMove);
         if(!this.canMove) return;
         this.canMove = false;
         let end = this.game.play(bindings[evt.key]);
@@ -23,7 +23,7 @@ class GUI {
         this.updateScore(this.game.getScore())
         this.isGameOver(end);
         this.canMove = true;
-        console.log("End move...");
+        // console.log("End move...");
     }
     updateScore(score) {
         let elem = document.querySelector("#score");
@@ -72,15 +72,12 @@ class GUI {
                 let xDiff = (xf - xi) * beginTD.offsetWidth;
                 let yDiff = (yf - yi) * beginTD.offsetWidth;
                 let beginTile = beginTD.firstChild;
-                beginTile.classList.remove("show");
-                beginTile.classList.remove("pop");
                 beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
                 beginTile.ontransitionend = () => resolve([beginCell, endCell]);
             });
-            console.log(beginCell, endCell);
             promises.push(p);
         }
-        console.log("Promise.all", promises);
+        // console.log("Promise.all", promises);
         return Promise.all(promises);
     }
     isGameOver(end) {
