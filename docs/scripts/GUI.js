@@ -13,7 +13,6 @@ class GUI {
         if (!bindings[evt.key]) {
             return;
         }
-        // console.log("Start move...", this.canMove);
         if(!this.canMove) return;
         this.canMove = false;
         let end = this.game.play(bindings[evt.key]);
@@ -23,7 +22,6 @@ class GUI {
         this.updateScore(this.game.getScore())
         this.isGameOver(end);
         this.canMove = true;
-        // console.log("End move...");
     }
     updateScore(score) {
         let elem = document.querySelector(".score div");
@@ -83,12 +81,11 @@ class GUI {
                 let xDiff = (xf - xi) * beginTD.offsetWidth;
                 let yDiff = (yf - yi) * beginTD.offsetWidth;
                 let beginTile = beginTD.firstChild;
-                beginTile.style.transform = `translate(${yDiff}px, ${xDiff}px)`;
-                beginTile.ontransitionend = () => resolve([beginCell, endCell]);
+                let anim = beginTile.animate([{top: 0, left: 0}, {top: `${xDiff}px`, left: `${yDiff}px`}], {duration: 100, easing: "ease-in-out"});
+                anim.onfinish = () => resolve([beginCell, endCell]);
             });
             promises.push(p);
         }
-        // console.log("Promise.all", promises);
         return Promise.all(promises);
     }
     isGameOver(end) {

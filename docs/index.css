@@ -45,7 +45,8 @@ td {
 }
 
 td div {
-    transition: transform 100ms ease-in-out;
+    /* transition: transform 100ms ease-in-out; */
+    position: relative;
 }
 
 .tile-2 {
@@ -162,6 +163,7 @@ td div {
     font-weight: bold;
     padding: 10px;
 }
+
 .score div {
     margin-top: 5px;
     font-size: x-large;
