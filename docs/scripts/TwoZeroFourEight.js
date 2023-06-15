@@ -19,7 +19,7 @@ export default class TwoZeroFourEight {
         this.getRandomValue(this.nextInt(this.ROWS), this.nextInt(this.COLS));
         let empty = this.listOfCells(0);
         let cell = empty[this.nextInt(empty.length)];
-        this.getRandomValue(cell.getX(),cell.getY());
+        this.getRandomValue(cell.getX(), cell.getY());
     }
 
     getBoard() {
@@ -90,15 +90,10 @@ export default class TwoZeroFourEight {
 
     move(row, col, rowDir, colDir) {
         let moved = false;
-        while (true) {
-            if (!this.onBoard(new Cell(row, col))) {
-                break;
-            }
+        for (; this.onBoard(new Cell(row, col)); row += rowDir, col += colDir) {
             if (this.board[row][col] !== 0) {
                 moved |= this.moveDirection(row, col, -rowDir, -colDir);
             }
-            row += rowDir;
-            col += colDir;
         }
         return moved;
     }
@@ -138,15 +133,7 @@ export default class TwoZeroFourEight {
     }
 
     listOfCells(value) {
-        let empty = [];
-        for (let i = 0; i < this.ROWS; i++) {
-            for (let j = 0; j < this.COLS; j++) {
-                if (this.board[i][j] == value) {
-                    empty.push(new Cell(i, j));
-                }
-            }
-        }
-        return empty;
+        return this.board.flat().map((val, i) => val === value ? new Cell(Math.floor(i / this.ROWS), i % this.COLS) : undefined).filter(x => x);
     }
 
     isGameOver() {
@@ -162,14 +149,7 @@ export default class TwoZeroFourEight {
     }
 
     lostGame() {
-        for (let i = 0; i < this.ROWS; i++) {
-            for (let j = 0; j < this.COLS; j++) {
-                if (this.canMoveCell(i, j)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return !this.board.flat().some((value, i) => this.canMoveCell(Math.floor(i / this.ROWS), i % this.COLS));
     }
 
     canMoveCell(row, col) {
