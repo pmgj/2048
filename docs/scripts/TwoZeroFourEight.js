@@ -102,27 +102,16 @@ export default class TwoZeroFourEight {
         this.newNumber = [];
         this.movedNumbers = [];
         let moved = false;
-        switch (direction) {
-            case Direction.TOP:
-                for (let j = 0; j < this.COLS; j++) {
-                    moved |= this.move(0, j, 1, 0);
-                }
-                break;
-            case Direction.BOTTOM:
-                for (let j = 0; j < this.COLS; j++) {
-                    moved |= this.move(this.ROWS - 1, j, -1, 0);
-                }
-                break;
-            case Direction.LEFT:
-                for (let j = 0; j < this.ROWS; j++) {
-                    moved |= this.move(j, 0, 0, 1);
-                }
-                break;
-            case Direction.RIGHT:
-                for (let j = 0; j < this.ROWS; j++) {
-                    moved |= this.move(j, this.COLS - 1, 0, -1);
-                }
-                break;
+        let SIZE = { 'TOP': this.COLS, 'BOTTOM': this.COLS, 'LEFT': this.ROWS, 'RIGHT': this.ROWS };
+        for (let j = 0; j < SIZE[direction]; j++) {
+            let obj = {
+                'TOP': { row: 0, col: j, rowDir: 1, colDir: 0 },
+                'BOTTOM': { row: this.ROWS - 1, col: j, rowDir: -1, colDir: 0 },
+                'LEFT': { row: j, col: 0, rowDir: 0, colDir: 1 },
+                'RIGHT': { row: j, col: this.COLS - 1, rowDir: 0, colDir: -1 }
+            };
+            let m = obj[direction];
+            moved |= this.move(m.row, m.col, m.rowDir, m.colDir);
         }
         if (moved) {
             let empty = this.listOfCells(0);
