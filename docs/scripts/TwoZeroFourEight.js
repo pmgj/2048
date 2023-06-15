@@ -1,6 +1,5 @@
 import Cell from "./Cell.js";
 import EndOfGame from "./EndOfGame.js";
-import Direction from "./Direction.js";
 
 export default class TwoZeroFourEight {
     constructor() {
