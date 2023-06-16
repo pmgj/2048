@@ -1,9 +1,11 @@
 import Direction from "./Direction.js";
 import EndOfGame from "./EndOfGame.js";
 import TwoZeroFourEight from "./TwoZeroFourEight.js";
+import Threes from "./Threes.js";
 
 class GUI {
     constructor() {
+        this.games = [new Threes(), new TwoZeroFourEight()];
         this.game = null;
         this.tbody = document.querySelector("tbody");
         this.canMove = true;
@@ -129,11 +131,17 @@ class GUI {
             td.appendChild(div);
         }
     }
-    init() {
-        this.game = new TwoZeroFourEight();
+    startGame(index) {
+        this.game = this.games[index];
         this.printBoard(this.game.getBoard());
         this.updateScore(0);
+    }
+    init() {
         document.addEventListener("keyup", this.move.bind(this));
+        let game = document.querySelector("#game");
+        this.games.forEach((g, i) => game.add(new Option(g, i)));
+        game.onchange = evt => this.startGame(evt.target.selectedIndex);
+        this.startGame(0);
     }
 }
 let gui = new GUI();

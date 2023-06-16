@@ -46,13 +46,22 @@ td {
 
 td div {
     position: relative;
+    color: white;
+    background-color: rgba(200, 0, 0, 0.8);
+}
+
+.tile-1 {
+    color: white;
+    background-color: #6cf;
 }
 
 .tile-2 {
+    color: #776e65;
     background-color: #eee4da;
 }
 
 .tile-4 {
+    color: #776e65;
     background-color: #eee1c9;
 }
 
@@ -133,7 +142,7 @@ td div {
     }
 }
 
-#message {
+p {
     text-align: center;
 }
 
