@@ -101,6 +101,6 @@ export default class SlidingGame {
     }
 
     lostGame() {
-        return !this.board.flat().some((value, i) => this.canMoveCell(Math.floor(i / this.ROWS), i % this.COLS));
+        return !this.board.flat().some((_, i) => this.canMoveCell(Math.floor(i / this.ROWS), i % this.COLS));
     }
 }

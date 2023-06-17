@@ -14,29 +14,26 @@ export default class TwoZeroFourEight extends SlidingGame {
     moveDirection(bRow, bCol, rowDir, colDir) {
         let dRow = bRow, dCol = bCol, i = 1;
         let moved = false;
+        let swap = (a, b, c, d, e) => {
+            this.board[c][d] = e ? e : this.board[a][b];
+            this.board[a][b] = 0;
+            moved = true;
+            this.movedNumbers.push([new Cell(a, b), new Cell(c, d)]);
+        };
         while (true) {
             let x = bRow + i * rowDir, y = bCol + i * colDir;
             if (!this.onBoard(new Cell(x, y))) {
                 if (bRow !== dRow || bCol !== dCol) {
-                    this.board[dRow][dCol] = this.board[bRow][bCol];
-                    this.board[bRow][bCol] = 0;
-                    moved = true;
-                    this.movedNumbers.push([new Cell(bRow, bCol), new Cell(dRow, dCol)]);
+                    swap(bRow, bCol, dRow, dCol);
                 }
                 break;
             }
             if (this.board[x][y] !== 0) {
                 if (this.board[x][y] === this.board[bRow][bCol]) {
-                    this.board[x][y] *= 2;
-                    this.board[bRow][bCol] = 0;
-                    moved = true;
-                    this.movedNumbers.push([new Cell(bRow, bCol), new Cell(x, y)]);
+                    swap(bRow, bCol, x, y, this.board[x][y] * 2);
                     this.score += this.board[x][y];
                 } else if (this.board[dRow][dCol] !== this.board[bRow][bCol]) {
-                    this.board[dRow][dCol] = this.board[bRow][bCol];
-                    this.board[bRow][bCol] = 0;
-                    moved = true;
-                    this.movedNumbers.push([new Cell(bRow, bCol), new Cell(dRow, dCol)]);
+                    swap(bRow, bCol, dRow, dCol);
                 }
                 break;
             }

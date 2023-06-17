@@ -5,7 +5,7 @@ import Threes from "./Threes.js";
 
 class GUI {
     constructor() {
-        this.games = [new Threes(), new TwoZeroFourEight()];
+        this.games = [new TwoZeroFourEight(), new Threes()];
         this.game = null;
         this.tbody = document.querySelector("tbody");
         this.canMove = true;
@@ -15,7 +15,7 @@ class GUI {
         if (!bindings[evt.key]) {
             return;
         }
-        if(!this.canMove) return;
+        if (!this.canMove) return;
         this.canMove = false;
         let end = this.game.play(bindings[evt.key]);
         let mn = this.game.getMovedNumbers();
@@ -29,9 +29,9 @@ class GUI {
         let elem = document.querySelector(".score div");
         elem.textContent = score;
         let best = localStorage.getItem("best");
-        if(best) {
+        if (best) {
             let b = parseInt(best);
-            if(score > b) {
+            if (score > b) {
                 localStorage.setItem("best", score);
             }
         } else {
@@ -83,7 +83,7 @@ class GUI {
                 let xDiff = (xf - xi) * beginTD.offsetWidth;
                 let yDiff = (yf - yi) * beginTD.offsetWidth;
                 let beginTile = beginTD.firstChild;
-                let anim = beginTile.animate([{top: 0, left: 0}, {top: `${xDiff}px`, left: `${yDiff}px`}], {duration: 100, easing: "ease-in-out"});
+                let anim = beginTile.animate([{ top: 0, left: 0 }, { top: `${xDiff}px`, left: `${yDiff}px` }], { duration: 100, easing: "ease-in-out" });
                 anim.onfinish = () => resolve([beginCell, endCell]);
             });
             promises.push(p);
