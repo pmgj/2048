@@ -23,7 +23,7 @@ export default class TwoZeroFourEight extends SlidingGame {
             x = bRow + i * rowDir;
             y = bCol + i * colDir;
             if (!this.onBoard(new Cell(x, y))) {
-                if (bRow !== dRow || bCol !== dCol) {
+                if (i !== 1) {
                     swap(dRow, dCol);
                 }
                 break;
