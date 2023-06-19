@@ -2,8 +2,13 @@ import Cell from "./Cell.js";
 import EndOfGame from "./EndOfGame.js";
 
 export default class SlidingGame {
-    constructor(name) {
+    constructor(name, icon) {
         this.name = name;
+        this.icon = icon;
+        this.restart();
+    }
+
+    restart() {
         this.board = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
@@ -16,14 +21,18 @@ export default class SlidingGame {
         this.newNumber = [];
         this.movedNumbers = [];
 
-        this.getRandomValue(this.nextInt(this.ROWS), this.nextInt(this.COLS));
+        this.getRandomValue(new Cell(this.nextInt(this.ROWS), this.nextInt(this.COLS)));
         let empty = this.listOfCells(0);
         let cell = empty[this.nextInt(empty.length)];
-        this.getRandomValue(cell.getX(), cell.getY());
+        this.getRandomValue(cell);
     }
 
     toString() {
         return this.name;
+    }
+
+    getIcon() {
+        return this.icon;
     }
 
     getBoard() {
@@ -49,6 +58,13 @@ export default class SlidingGame {
     onBoard({ x, y }) {
         let inLimit = (value, limit) => value >= 0 && value < limit;
         return (inLimit(x, this.ROWS) && inLimit(y, this.COLS));
+    }
+
+    swap(bRow, bCol, eRow, eCol, value) {
+        this.board[eRow][eCol] = value ? value : this.board[bRow][bCol];
+        this.board[bRow][bCol] = 0;
+        this.movedNumbers.push([new Cell(bRow, bCol), new Cell(eRow, eCol)]);
+        return true;
     }
 
     move(row, col, rowDir, colDir) {
@@ -79,7 +95,7 @@ export default class SlidingGame {
         if (moved) {
             let empty = this.listOfCells(0);
             let cell = empty[this.nextInt(empty.length)];
-            this.getRandomValue(cell.getX(), cell.getY());
+            this.getRandomValue(cell);
         }
         return this.isGameOver();
     }

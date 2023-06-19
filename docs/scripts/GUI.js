@@ -5,7 +5,7 @@ import Threes from "./Threes.js";
 
 class GUI {
     constructor() {
-        this.games = [new TwoZeroFourEight(), new Threes()];
+        this.games = [new Threes(), new TwoZeroFourEight()];
         this.game = null;
         this.tbody = document.querySelector("tbody");
         this.canMove = true;
@@ -80,10 +80,8 @@ class GUI {
                 let { x: xi, y: yi } = beginCell;
                 let { x: xf, y: yf } = endCell;
                 let beginTD = this.tbody.rows[xi].cells[yi];
-                let xDiff = (xf - xi) * beginTD.offsetWidth;
-                let yDiff = (yf - yi) * beginTD.offsetWidth;
                 let beginTile = beginTD.firstChild;
-                let anim = beginTile.animate([{ top: 0, left: 0 }, { top: `${xDiff}px`, left: `${yDiff}px` }], { duration: 100, easing: "ease-in-out" });
+                let anim = beginTile.animate([{ top: 0, left: 0 }, { top: `${(xf - xi) * beginTD.offsetWidth}px`, left: `${(yf - yi) * beginTD.offsetWidth}px` }], { duration: 100, easing: "ease-in-out" });
                 anim.onfinish = () => resolve([beginCell, endCell]);
             });
             promises.push(p);
@@ -99,6 +97,8 @@ class GUI {
             case EndOfGame.LOSE:
                 message.textContent = "You lose!";
                 break;
+            default:
+                message.textContent = "";
         }
     }
     printBoard(board) {
@@ -133,14 +133,24 @@ class GUI {
     }
     startGame(index) {
         this.game = this.games[index];
+        this.game.restart();
         this.printBoard(this.game.getBoard());
         this.updateScore(0);
+        this.isGameOver();
+        let caption = document.querySelector("caption");
+        caption.textContent = this.game;
+        let title = document.querySelector("title");
+        title.textContent = this.game;
+        let icon = document.querySelector("link[rel='icon']");
+        icon.href = this.game.getIcon();
     }
     init() {
         document.addEventListener("keyup", this.move.bind(this));
         let game = document.querySelector("#game");
         this.games.forEach((g, i) => game.add(new Option(g, i)));
         game.onchange = evt => this.startGame(evt.target.selectedIndex);
+        let start = document.querySelector("input[value='Start']");
+        start.onclick = () => this.startGame(game.selectedIndex);
         this.startGame(0);
     }
 }

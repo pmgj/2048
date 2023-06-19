@@ -3,34 +3,28 @@ import SlidingGame from "./SlidingGame.js";
 
 export default class Threes extends SlidingGame {
     constructor() {
-        super("Threes");
+        super("Threes", "threes_icon.png");
     }
 
-    getRandomValue(x, y) {
+    getRandomValue(cell) {
+        let { x, y } = cell;
         this.board[x][y] = this.nextInt(3) + 1;
-        this.newNumber.push({ cell: new Cell(x, y), value: this.board[x][y] });
+        this.newNumber.push({ cell: cell, value: this.board[x][y] });
     }
 
     moveDirection(bRow, bCol, rowDir, colDir) {
-        let moved = false;
-        let x = bRow + rowDir, y = bCol + colDir;
+        let moved = false, x = bRow + rowDir, y = bCol + colDir;
         if (!this.onBoard(new Cell(x, y))) {
             return moved;
         }
         if (this.board[x][y] !== 0) {
             let sum = this.board[x][y] + this.board[bRow][bCol];
             if (sum === 3 || (sum % 3 === 0 && this.board[x][y] === this.board[bRow][bCol])) {
-                this.board[x][y] += this.board[bRow][bCol];
-                this.board[bRow][bCol] = 0;
-                moved = true;
-                this.movedNumbers.push([new Cell(bRow, bCol), new Cell(x, y)]);
+                moved = this.swap(bRow, bCol, x, y, sum);
                 this.score += this.board[x][y];
             }
         } else {
-            this.board[x][y] = this.board[bRow][bCol];
-            this.board[bRow][bCol] = 0;
-            moved = true;
-            this.movedNumbers.push([new Cell(bRow, bCol), new Cell(x, y)]);
+            moved = this.swap(bRow, bCol, x, y);
         }
         return moved;
     }
