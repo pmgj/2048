@@ -142,7 +142,11 @@ class GUI {
         let title = document.querySelector("title");
         title.textContent = this.game;
         let icon = document.querySelector("link[rel='icon']");
-        icon.href = this.game.getIcon();
+        icon.href = `images/${this.game.getIcon()}`;
+        this.games.forEach(g => {
+            let style = document.querySelector(`link[title='${g}']`);
+            style.disabled = g !== this.game;
+        });
     }
     init() {
         document.addEventListener("keyup", this.move.bind(this));

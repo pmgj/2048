@@ -1,0 +1,17 @@
+td div {
+    color: black;
+    background-color: white;
+    box-shadow: 0 8px #fc6;
+}
+
+.tile-1 {
+    color: white;
+    background-color: #6cf;
+    box-shadow: 0 8px #0af;
+}
+
+.tile-2 {
+    color: white;
+    background-color: #ff6680;
+    box-shadow: 0 8px #ff002b;
+}
