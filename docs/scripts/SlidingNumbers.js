@@ -104,18 +104,6 @@ export default class SlidingNumbers {
         return this.board.flat().map((val, i) => val === value ? new Cell(Math.floor(i / this.ROWS), i % this.COLS) : undefined).filter(x => x);
     }
 
-    isGameOver() {
-        let list = this.listOfCells(2048);
-        if (list.length !== 0) {
-            return EndOfGame.WIN;
-        }
-        list = this.listOfCells(0);
-        if (list.length === 0 && this.lostGame()) {
-            return EndOfGame.LOSE;
-        }
-        return EndOfGame.NONE;
-    }
-
     lostGame() {
         return !this.board.flat().some((_, i) => this.canMoveCell(Math.floor(i / this.ROWS), i % this.COLS));
     }

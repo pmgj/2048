@@ -4,10 +4,6 @@ import java.util.List;
 
 public class TwoZeroFourEight extends SlidingNumbers {
 
-    public TwoZeroFourEight() {
-        super();
-    }
-
     protected void getRandomValue(Cell cell) {
         int x = cell.getX(), y = cell.getY();
         this.board[x][y] = this.nextInt(10) != 9 ? 2 : 4;
@@ -45,5 +41,17 @@ public class TwoZeroFourEight extends SlidingNumbers {
         int value = this.board[row][col];
         return positions.stream().anyMatch(
                 cell -> this.onBoard(cell) && this.board[cell.getX()][cell.getY()] == value);
+    }
+
+    protected EndOfGame isGameOver() {
+        List<Cell> list = this.listOfCells(2048);
+        if (!list.isEmpty()) {
+            return EndOfGame.WIN;
+        }
+        list = this.listOfCells(0);
+        if (list.isEmpty() && this.lostGame()) {
+            return EndOfGame.LOSE;
+        }
+        return EndOfGame.NONE;
     }
 }

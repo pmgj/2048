@@ -34,4 +34,12 @@ export default class Threes extends SlidingNumbers {
         let value = this.board[row][col];
         return positions.some(cell => this.onBoard(cell) && (this.board[cell.getX()][cell.getY()] + value === 3 || ((this.board[cell.getX()][cell.getY()] + value) % 3 === 0) && this.board[cell.getX()][cell.getY()] === value));
     }
+
+    isGameOver() {
+        let list = this.listOfCells(0);
+        if (list.length === 0 && this.lostGame()) {
+            return EndOfGame.LOSE;
+        }
+        return EndOfGame.NONE;
+    }
 }

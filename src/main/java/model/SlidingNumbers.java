@@ -21,6 +21,8 @@ public abstract class SlidingNumbers {
 
     protected abstract boolean canMoveCell(int row, int col);
 
+    protected abstract EndOfGame isGameOver();
+
     public SlidingNumbers() {
         this.restart();
     }
@@ -102,7 +104,7 @@ public abstract class SlidingNumbers {
         return this.isGameOver();
     }
 
-    private List<Cell> listOfCells(int value) {
+    protected List<Cell> listOfCells(int value) {
         List<Cell> empty = new ArrayList<>();
         for (int i = 0; i < this.ROWS; i++) {
             for (int j = 0; j < this.COLS; j++) {
@@ -114,19 +116,7 @@ public abstract class SlidingNumbers {
         return empty;
     }
 
-    private EndOfGame isGameOver() {
-        List<Cell> list = this.listOfCells(2048);
-        if (!list.isEmpty()) {
-            return EndOfGame.WIN;
-        }
-        list = this.listOfCells(0);
-        if (list.isEmpty() && this.lostGame()) {
-            return EndOfGame.LOSE;
-        }
-        return EndOfGame.NONE;
-    }
-
-    private boolean lostGame() {
+    protected boolean lostGame() {
         for (int i = 0; i < this.ROWS; i++) {
             for (int j = 0; j < this.COLS; j++) {
                 if (this.canMoveCell(i, j)) {

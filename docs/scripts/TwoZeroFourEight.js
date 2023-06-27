@@ -41,4 +41,16 @@ export default class TwoZeroFourEight extends SlidingNumbers {
         let value = this.board[row][col];
         return positions.some(cell => this.onBoard(cell) && this.board[cell.getX()][cell.getY()] === value);
     }
+
+    isGameOver() {
+        let list = this.listOfCells(2048);
+        if (list.length !== 0) {
+            return EndOfGame.WIN;
+        }
+        list = this.listOfCells(0);
+        if (list.length === 0 && this.lostGame()) {
+            return EndOfGame.LOSE;
+        }
+        return EndOfGame.NONE;
+    }
 }
