@@ -1,7 +1,7 @@
 import Cell from "./Cell.js";
-import SlidingGame from "./SlidingGame.js";
+import SlidingNumbers from "./SlidingNumbers.js";
 
-export default class Threes extends SlidingGame {
+export default class Threes extends SlidingNumbers {
     constructor() {
         super("Threes", "threes_icon.png");
     }

@@ -1,7 +1,7 @@
 import Cell from "./Cell.js";
 import EndOfGame from "./EndOfGame.js";
 
-export default class SlidingGame {
+export default class SlidingNumbers {
     constructor(name, icon) {
         this.name = name;
         this.icon = icon;

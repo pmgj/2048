@@ -1,7 +1,7 @@
 import Cell from "./Cell.js";
-import SlidingGame from "./SlidingGame.js";
+import SlidingNumbers from "./SlidingNumbers.js";
 
-export default class TwoZeroFourEight extends SlidingGame {
+export default class TwoZeroFourEight extends SlidingNumbers {
     constructor() {
         super("2048", "2048_icon.ico");
     }

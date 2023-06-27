@@ -4,12 +4,13 @@ import java.util.Scanner;
 
 import model.Direction;
 import model.EndOfGame;
+import model.SlidingNumbers;
 import model.TwoZeroFourEight;
 
 public class CLI {
 
     public static void main(String[] args) {
-        TwoZeroFourEight game = new TwoZeroFourEight();
+        SlidingNumbers game = new TwoZeroFourEight();
         Runnable r = () -> {
             for (Integer[] is : game.getBoard()) {
                 for (int i : is) {
