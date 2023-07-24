@@ -2,15 +2,14 @@ import Cell from "./Cell.js";
 import SlidingNumbers from "./SlidingNumbers.js";
 import EndOfGame from "./EndOfGame.js";
 
-
-export default class TwoZeroFourEight extends SlidingNumbers {
+export default class OneZeroTwoFour extends SlidingNumbers {
     constructor() {
-        super("2048", "2048_icon.ico");
+        super("1024", "1024_icon.png");
     }
 
     getRandomValue(cell) {
         let { x, y } = cell;
-        this.board[x][y] = this.nextInt(10) != 9 ? 2 : 4;
+        this.board[x][y] = this.nextInt(10) != 9 ? 1 : 2;
         this.newNumber.push({ cell: cell, value: this.board[x][y] });
     }
 
@@ -45,7 +44,7 @@ export default class TwoZeroFourEight extends SlidingNumbers {
     }
 
     isGameOver() {
-        let list = this.listOfCells(2048);
+        let list = this.listOfCells(1024);
         if (list.length !== 0) {
             return EndOfGame.WIN;
         }

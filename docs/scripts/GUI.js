@@ -1,11 +1,12 @@
 import Direction from "./Direction.js";
 import EndOfGame from "./EndOfGame.js";
 import TwoZeroFourEight from "./TwoZeroFourEight.js";
+import OneZeroTwoFour from "./OneZeroTwoFour.js";
 import Threes from "./Threes.js";
 
 class GUI {
     constructor() {
-        this.games = [new Threes(), new TwoZeroFourEight()];
+        this.games = [new OneZeroTwoFour(), new Threes(), new TwoZeroFourEight()];
         this.game = null;
         this.tbody = document.querySelector("tbody");
         this.canMove = true;

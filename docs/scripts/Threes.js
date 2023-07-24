@@ -1,5 +1,6 @@
 import Cell from "./Cell.js";
 import SlidingNumbers from "./SlidingNumbers.js";
+import EndOfGame from "./EndOfGame.js";
 
 export default class Threes extends SlidingNumbers {
     constructor() {
