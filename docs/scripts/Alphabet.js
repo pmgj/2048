@@ -44,7 +44,7 @@ export default class Alphabet extends SlidingNumbers {
     }
 
     isGameOver() {
-        let list = this.listOfCells(2048);
+        let list = this.listOfCells('Z');
         if (list.length !== 0) {
             return EndOfGame.WIN;
         }
