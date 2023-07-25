@@ -1,5 +1,4 @@
 import Cell from "./Cell.js";
-import EndOfGame from "./EndOfGame.js";
 
 export default class SlidingNumbers {
     constructor(name, icon) {

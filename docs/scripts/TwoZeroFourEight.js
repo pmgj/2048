@@ -2,7 +2,6 @@ import Cell from "./Cell.js";
 import SlidingNumbers from "./SlidingNumbers.js";
 import EndOfGame from "./EndOfGame.js";
 
-
 export default class TwoZeroFourEight extends SlidingNumbers {
     constructor() {
         super("2048", "2048_icon.ico");
