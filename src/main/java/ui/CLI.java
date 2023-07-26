@@ -1,16 +1,16 @@
 package ui;
 
+import java.util.Map;
 import java.util.Scanner;
 
 import model.Direction;
 import model.EndOfGame;
-import model.SlidingNumbers;
-import model.Threes;
+import model.rules.OneZeroTwoFour;
 
 public class CLI {
 
     public static void main(String[] args) {
-        SlidingNumbers game = new Threes();
+        var game = new OneZeroTwoFour();
         Runnable r = () -> {
             for (Integer[] is : game.getBoard()) {
                 for (int i : is) {
@@ -20,30 +20,14 @@ public class CLI {
             }
             System.out.println(String.format("Score: %d", game.getScore()));
         };
-        EndOfGame end = EndOfGame.NONE;
-        Scanner in = new Scanner(System.in);
+        var end = EndOfGame.NONE;
+        var in = new Scanner(System.in);
+        var map = Map.of("w", Direction.TOP, "s", Direction.BOTTOM, "a", Direction.LEFT, "d", Direction.RIGHT);
         while (end == EndOfGame.NONE) {
             r.run();
             System.out.print("Informe sua movimentação: ");
-            String x = in.next();
-            switch (x) {
-                case "w":
-                case "W":
-                    end = game.play(Direction.TOP);
-                    break;
-                case "s":
-                case "S":
-                    end = game.play(Direction.BOTTOM);
-                    break;
-                case "a":
-                case "A":
-                    end = game.play(Direction.LEFT);
-                    break;
-                case "d":
-                case "D":
-                    end = game.play(Direction.RIGHT);
-                    break;
-            }
+            var x = in.next();
+            end = game.play(map.get(x));
         }
         r.run();
         System.out.println(end == EndOfGame.WIN ? "You win!" : "You lose!");

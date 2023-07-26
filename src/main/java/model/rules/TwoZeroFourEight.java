@@ -1,6 +1,10 @@
-package model;
+package model.rules;
 
 import java.util.List;
+
+import model.Cell;
+import model.CellValue;
+import model.EndOfGame;
 
 public class TwoZeroFourEight extends SlidingNumbers {
 
@@ -36,15 +40,14 @@ public class TwoZeroFourEight extends SlidingNumbers {
     }
 
     protected boolean canMoveCell(int row, int col) {
-        List<Cell> positions = List.of(new Cell(row - 1, col), new Cell(row + 1, col), new Cell(row, col - 1),
-                new Cell(row, col + 1));
+        var positions = List.of(new Cell(row - 1, col), new Cell(row + 1, col), new Cell(row, col - 1), new Cell(row, col + 1));
         int value = this.board[row][col];
         return positions.stream().anyMatch(
                 cell -> this.onBoard(cell) && this.board[cell.getX()][cell.getY()] == value);
     }
 
     protected EndOfGame isGameOver() {
-        List<Cell> list = this.listOfCells(2048);
+        var list = this.listOfCells(2048);
         if (!list.isEmpty()) {
             return EndOfGame.WIN;
         }

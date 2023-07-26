@@ -1,10 +1,17 @@
-package model;
+package model.rules;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.BiFunction;
+
+import model.Cell;
+import model.CellDirection;
+import model.CellValue;
+import model.Direction;
+import model.EndOfGame;
+import model.PairOfCells;
 
 public abstract class SlidingNumbers {
     protected Integer[][] board;
@@ -42,8 +49,8 @@ public abstract class SlidingNumbers {
         this.newNumbers.clear();
 
         this.getRandomValue(new Cell(this.nextInt(this.ROWS), this.nextInt(this.COLS)));
-        List<Cell> empty = this.listOfCells(0);
-        Cell cell = empty.get(this.nextInt(empty.size()));
+        var empty = this.listOfCells(0);
+        var cell = empty.get(this.nextInt(empty.size()));
         this.getRandomValue(cell);
     }
 
@@ -86,26 +93,26 @@ public abstract class SlidingNumbers {
         this.newNumbers.clear();
         this.movedNumbers.clear();
         boolean moved = false;
-        Map<Direction, Integer> SIZE = Map.of(Direction.TOP, this.COLS, Direction.BOTTOM, this.COLS, Direction.LEFT,
+        var SIZE = Map.of(Direction.TOP, this.COLS, Direction.BOTTOM, this.COLS, Direction.LEFT,
                 this.ROWS, Direction.RIGHT, this.ROWS);
         for (int j = 0; j < SIZE.get(direction); j++) {
-            Map<Direction, CellDirection> obj = Map.of(Direction.TOP, new CellDirection(0, j, 1, 0), Direction.BOTTOM,
+            var obj = Map.of(Direction.TOP, new CellDirection(0, j, 1, 0), Direction.BOTTOM,
                     new CellDirection(this.ROWS - 1, j, -1, 0),
                     Direction.LEFT, new CellDirection(j, 0, 0, 1), Direction.RIGHT,
                     new CellDirection(j, this.COLS - 1, 0, -1));
-            CellDirection m = obj.get(direction);
+            var m = obj.get(direction);
             moved |= this.move(m.getRow(), m.getCol(), m.getRowDir(), m.getColDir());
         }
         if (moved) {
-            List<Cell> empty = this.listOfCells(0);
-            Cell cell = empty.get(random.nextInt(empty.size()));
+            var empty = this.listOfCells(0);
+            var cell = empty.get(random.nextInt(empty.size()));
             this.getRandomValue(cell);
         }
         return this.isGameOver();
     }
 
     protected List<Cell> listOfCells(int value) {
-        List<Cell> empty = new ArrayList<>();
+        var empty = new ArrayList<Cell>();
         for (int i = 0; i < this.ROWS; i++) {
             for (int j = 0; j < this.COLS; j++) {
                 if (this.board[i][j] == value) {
