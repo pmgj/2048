@@ -10,7 +10,7 @@ public class Alphabet extends SlidingNumbers {
 
     protected void getRandomValue(Cell cell) {
         int x = cell.getX(), y = cell.getY();
-        // this.board[x][y] = this.nextInt(10) != 9 ? 'A' : 'B';
+        this.board[x][y] = this.nextInt(10) != 9 ? "A" : "B";
         this.newNumbers.add(new CellValue(cell, this.board[x][y]));
     }
 
@@ -22,16 +22,16 @@ public class Alphabet extends SlidingNumbers {
             y = bCol + i * colDir;
             if (!this.onBoard(new Cell(x, y))) {
                 if (i != 1) {
-                    moved = this.swap(bRow, bCol, dRow, dCol, -1);
+                    moved = this.swap(bRow, bCol, dRow, dCol, null);
                 }
                 break;
             }
-            if (this.board[x][y] != 0) {
-                if (this.board[x][y] == this.board[bRow][bCol]) {
-                    // moved = this.swap(bRow, bCol, x, y, String.fromCharCode(this.board[x][y].charCodeAt(0) + 1));
-                    // this.score += 2 * Math.pow(2, this.board[x][y].charCodeAt(0) - 65);
+            if (this.board[x][y] != "0") {
+                if (this.board[x][y].equals(this.board[bRow][bCol])) {
+                    moved = this.swap(bRow, bCol, x, y, "" + (char) (this.board[x][y].codePointAt(0) + 1));
+                    this.score += 2 * Math.pow(2, this.board[x][y].codePointAt(0) - 65);
                 } else if (this.board[dRow][dCol] != this.board[bRow][bCol]) {
-                    moved = this.swap(bRow, bCol, dRow, dCol, -1);
+                    moved = this.swap(bRow, bCol, dRow, dCol, null);
                 }
                 break;
             }
@@ -41,17 +41,17 @@ public class Alphabet extends SlidingNumbers {
 
     protected boolean canMoveCell(int row, int col) {
         var positions = List.of(new Cell(row - 1, col), new Cell(row + 1, col), new Cell(row, col - 1), new Cell(row, col + 1));
-        int value = this.board[row][col];
+        var value = this.board[row][col];
         return positions.stream().anyMatch(
                 cell -> this.onBoard(cell) && this.board[cell.getX()][cell.getY()] == value);
     }
 
     protected EndOfGame isGameOver() {
-        var list = this.listOfCells('Z');
+        var list = this.listOfCells("Z");
         if (!list.isEmpty()) {
             return EndOfGame.WIN;
         }
-        list = this.listOfCells(0);
+        list = this.listOfCells("0");
         if (list.isEmpty() && this.lostGame()) {
             return EndOfGame.LOSE;
         }

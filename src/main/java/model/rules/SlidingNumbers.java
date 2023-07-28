@@ -14,7 +14,7 @@ import model.EndOfGame;
 import model.PairOfCells;
 
 public abstract class SlidingNumbers {
-    protected Integer[][] board;
+    protected String[][] board;
     protected int ROWS;
     protected int COLS;
     protected Random random = new Random();
@@ -35,11 +35,11 @@ public abstract class SlidingNumbers {
     }
 
     private void restart() {
-        this.board = new Integer[][] {
-                { 0, 0, 0, 0 },
-                { 0, 0, 0, 0 },
-                { 0, 0, 0, 0 },
-                { 0, 0, 0, 0 },
+        this.board = new String[][] {
+                { "0", "0", "0", "0" },
+                { "0", "0", "0", "0" },
+                { "0", "0", "0", "0" },
+                { "0", "0", "0", "0" },
         };
         this.ROWS = board.length;
         this.COLS = board[0].length;
@@ -49,12 +49,12 @@ public abstract class SlidingNumbers {
         this.newNumbers.clear();
 
         this.getRandomValue(new Cell(this.nextInt(this.ROWS), this.nextInt(this.COLS)));
-        var empty = this.listOfCells(0);
+        var empty = this.listOfCells("0");
         var cell = empty.get(this.nextInt(empty.size()));
         this.getRandomValue(cell);
     }
 
-    public Integer[][] getBoard() {
+    public String[][] getBoard() {
         return this.board;
     }
 
@@ -72,9 +72,9 @@ public abstract class SlidingNumbers {
         return (inLimit.apply(row, this.ROWS) && inLimit.apply(col, this.COLS));
     }
 
-    protected boolean swap(int bRow, int bCol, int eRow, int eCol, int value) {
-        this.board[eRow][eCol] = value != -1 ? value : this.board[bRow][bCol];
-        this.board[bRow][bCol] = 0;
+    protected boolean swap(int bRow, int bCol, int eRow, int eCol, String value) {
+        this.board[eRow][eCol] = value != null ? value : this.board[bRow][bCol];
+        this.board[bRow][bCol] = "0";
         this.movedNumbers.add(new PairOfCells(new Cell(bRow, bCol), new Cell(eRow, eCol)));
         return true;
     }
@@ -82,7 +82,7 @@ public abstract class SlidingNumbers {
     private boolean move(int row, int col, int rowDir, int colDir) {
         boolean moved = false;
         for (; this.onBoard(new Cell(row, col)); row += rowDir, col += colDir) {
-            if (this.board[row][col] != 0) {
+            if (this.board[row][col] != "0") {
                 moved |= this.moveDirection(row, col, -rowDir, -colDir);
             }
         }
@@ -104,14 +104,14 @@ public abstract class SlidingNumbers {
             moved |= this.move(m.getRow(), m.getCol(), m.getRowDir(), m.getColDir());
         }
         if (moved) {
-            var empty = this.listOfCells(0);
+            var empty = this.listOfCells("0");
             var cell = empty.get(random.nextInt(empty.size()));
             this.getRandomValue(cell);
         }
         return this.isGameOver();
     }
 
-    protected List<Cell> listOfCells(int value) {
+    protected List<Cell> listOfCells(String value) {
         var empty = new ArrayList<Cell>();
         for (int i = 0; i < this.ROWS; i++) {
             for (int j = 0; j < this.COLS; j++) {

@@ -5,16 +5,16 @@ import java.util.Scanner;
 
 import model.Direction;
 import model.EndOfGame;
-import model.rules.OneZeroTwoFour;
+import model.rules.Alphabet;
 
 public class CLI {
 
     public static void main(String[] args) {
-        var game = new OneZeroTwoFour();
+        var game = new Alphabet();
         Runnable r = () -> {
-            for (Integer[] is : game.getBoard()) {
-                for (int i : is) {
-                    System.out.print(String.format("%4d  ", i));
+            for (var is : game.getBoard()) {
+                for (var i : is) {
+                    System.out.print(String.format("%4s  ", i));
                 }
                 System.out.println();
             }
