@@ -9,7 +9,7 @@ import model.EndOfGame;
 public class Threes extends SlidingNumbers {
 
     protected void getRandomValue(Cell cell) {
-        int x = cell.getX(), y = cell.getY();
+        int x = cell.x(), y = cell.y();
         this.board[x][y] = "" + (this.nextInt(3) + 1);
         this.newNumbers.add(new CellValue(cell, this.board[x][y]));
     }
@@ -36,9 +36,9 @@ public class Threes extends SlidingNumbers {
         var positions = List.of(new Cell(row - 1, col), new Cell(row + 1, col), new Cell(row, col - 1), new Cell(row, col + 1));
         var value = this.board[row][col];
         return positions.stream().anyMatch(
-                cell -> this.onBoard(cell) && (Integer.parseInt(this.board[cell.getX()][cell.getY()]) + Integer.parseInt(value) == 3
-                        || ((Integer.parseInt(this.board[cell.getX()][cell.getY()]) + Integer.parseInt(value)) % 3 == 0)
-                                && this.board[cell.getX()][cell.getY()] == value));
+                cell -> this.onBoard(cell) && (Integer.parseInt(this.board[cell.x()][cell.y()]) + Integer.parseInt(value) == 3
+                        || ((Integer.parseInt(this.board[cell.x()][cell.y()]) + Integer.parseInt(value)) % 3 == 0)
+                                && this.board[cell.x()][cell.y()] == value));
     }
 
     protected EndOfGame isGameOver() {

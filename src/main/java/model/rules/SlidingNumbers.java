@@ -67,7 +67,7 @@ public abstract class SlidingNumbers {
     }
 
     protected boolean onBoard(Cell cell) {
-        int row = cell.getX(), col = cell.getY();
+        int row = cell.x(), col = cell.y();
         BiFunction<Integer, Integer, Boolean> inLimit = (value, limit) -> value >= 0 && value < limit;
         return (inLimit.apply(row, this.ROWS) && inLimit.apply(col, this.COLS));
     }
@@ -101,7 +101,7 @@ public abstract class SlidingNumbers {
                     Direction.LEFT, new CellDirection(j, 0, 0, 1), Direction.RIGHT,
                     new CellDirection(j, this.COLS - 1, 0, -1));
             var m = obj.get(direction);
-            moved |= this.move(m.getRow(), m.getCol(), m.getRowDir(), m.getColDir());
+            moved |= this.move(m.row(), m.col(), m.rowDir(), m.colDir());
         }
         if (moved) {
             var empty = this.listOfCells("0");
