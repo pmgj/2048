@@ -166,6 +166,7 @@ class GUI {
             initialTime = new Date();
         });
         document.addEventListener("touchend", e => {
+            e.preventDefault();
             let deltaX = e.changedTouches[0].clientX - initialX;
             let deltaY = e.changedTouches[0].clientY - initialY;
             let deltaTime = new Date() - initialTime;
