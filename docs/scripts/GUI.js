@@ -159,25 +159,24 @@ class GUI {
         start.onclick = () => this.startGame(game.selectedIndex);
         this.startGame(0);
         let initialX, initialY, initialTime;
+        let threshold = 150, allowedTime = 400, restraint = 100;
         document.addEventListener("touchstart", e => {
             initialX = e.touches[0].clientX;
             initialY = e.touches[0].clientY;
             initialTime = new Date();
-            console.log(initialX, initialY, initialTime);
         });
         document.addEventListener("touchend", e => {
             let deltaX = e.changedTouches[0].clientX - initialX;
-            let deltaY = Math.abs(e.changedTouches[0].clientY - initialY);
+            let deltaY = e.changedTouches[0].clientY - initialY;
             let deltaTime = new Date() - initialTime;
-            console.log(deltaX, deltaY, deltaTime);
-            let message = document.querySelector("#message");
-            if (deltaX <= -30 && deltaY <= 100 && deltaTime <= 300) {
-                message.textContent = 'Swipe-left detected';
-            } else if (deltaX <= 30 && deltaY <= 100 && deltaTime <= 300) {
-                message.textContent = 'Swipe-right detected';
-            } else {
-                message.textContent ='Not a swipe';
+            if (deltaTime > allowedTime) return;
+            let obj = {};
+            if (Math.abs(deltaX) >= threshold && Math.abs(deltaY) <= restraint) {
+                obj.key = (deltaX < 0) ? 'ArrowLeft' : 'ArrowRight';
+            } else if (Math.abs(deltaY) >= threshold && Math.abs(deltaX) <= restraint) {
+                obj.key = (deltaY < 0) ? 'ArrowUp' : 'ArrowDown';
             }
+            this.move(obj);
         });
     }
 }
