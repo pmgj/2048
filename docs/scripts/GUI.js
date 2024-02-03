@@ -158,6 +158,27 @@ class GUI {
         let start = document.querySelector("input[value='Start']");
         start.onclick = () => this.startGame(game.selectedIndex);
         this.startGame(0);
+        let initialX, initialY, initialTime;
+        document.addEventListener("touchstart", e => {
+            initialX = e.touches[0].clientX;
+            initialY = e.touches[0].clientY;
+            initialTime = new Date();
+            console.log(initialX, initialY, initialTime);
+        });
+        document.addEventListener("touchend", e => {
+            let deltaX = e.changedTouches[0].clientX - initialX;
+            let deltaY = Math.abs(e.changedTouches[0].clientY - initialY);
+            let deltaTime = new Date() - initialTime;
+            console.log(deltaX, deltaY, deltaTime);
+            let message = document.querySelector("#message");
+            if (deltaX <= -30 && deltaY <= 100 && deltaTime <= 300) {
+                message.textContent = 'Swipe-left detected';
+            } else if (deltaX <= 30 && deltaY <= 100 && deltaTime <= 300) {
+                message.textContent = 'Swipe-right detected';
+            } else {
+                message.textContent ='Not a swipe';
+            }
+        });
     }
 }
 let gui = new GUI();
