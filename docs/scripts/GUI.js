@@ -161,9 +161,13 @@ class GUI {
         let initialX, initialY, initialTime;
         let threshold = 150, allowedTime = 400, restraint = 100;
         document.addEventListener("touchstart", e => {
+            e.preventDefault();
             initialX = e.touches[0].clientX;
             initialY = e.touches[0].clientY;
             initialTime = new Date();
+        });
+        document.addEventListener("touchmove", e => {
+            e.preventDefault();
         });
         document.addEventListener("touchend", e => {
             e.preventDefault();
